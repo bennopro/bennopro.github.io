@@ -219,27 +219,18 @@
     </footer>
 
     <!-- VAPI SDK -->
-    <script src="https://cdn.jsdelivr.net/npm/@vapi-ai/web@2.4.2/dist/index.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@vapi-ai/web@2.4.2/dist/index.min.js"></script>
 
-    <script>
-        // Wait for DOM and VAPI SDK to load
-        window.addEventListener('load', function() {
+    <script type="module">
+        // Import VAPI SDK
+        import Vapi from 'https://cdn.jsdelivr.net/npm/@vapi-ai/web@2.4.2/dist/index.js';
+
+        // Wait for DOM to load
+        window.addEventListener('DOMContentLoaded', function() {
             console.log('Initializing VAPI...');
 
-            // Check if VAPI SDK is loaded
-            if (!window.vapiSDK) {
-                console.error('VAPI SDK not loaded!');
-                alert('Voice assistant could not be loaded. Please refresh the page.');
-                return;
-            }
-
             // VAPI Configuration
-            const vapi = window.vapiSDK.run({
-                apiKey: '2aa3e6db-8f83-4729-b9fc-6541a14ae98d', // Your Public API Key
-                assistant: {
-                    assistantId: '3966c02d-58b3-46da-9ef2-72b0baa97554', // Your Assistant ID
-                }
-            });
+            const vapi = new Vapi('2aa3e6db-8f83-4729-b9fc-6541a14ae98d');
 
             console.log('VAPI initialized:', vapi);
 
@@ -248,7 +239,7 @@
                 console.log('Starting call...');
 
                 try {
-                    vapi.start();
+                    vapi.start('3966c02d-58b3-46da-9ef2-72b0baa97554');
 
                     // Show call status
                     document.getElementById('callStatus').classList.add('active');
