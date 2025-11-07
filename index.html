@@ -219,21 +219,23 @@
     </footer>
 
     <!-- VAPI Web SDK -->
+    <script src="https://unpkg.com/@vapi-ai/web@2.4.2/dist/index.umd.min.js"></script>
+
     <script>
         (function() {
-            // Create script element
-            const script = document.createElement('script');
-            script.src = 'https://cdn.jsdelivr.net/npm/@vapi-ai/web@latest/dist/index.umd.js';
-            script.onload = function() {
-                console.log('VAPI SDK loaded');
+            // Wait for page to load
+            window.addEventListener('load', function() {
+                console.log('Page loaded, initializing VAPI...');
                 console.log('window.vapiSDK:', window.vapiSDK);
+
+                if (!window.vapiSDK) {
+                    console.error('VAPI SDK not available');
+                    alert('Voice assistant could not be loaded. Please refresh the page.');
+                    return;
+                }
+
                 initVapi();
-            };
-            script.onerror = function() {
-                console.error('Failed to load VAPI SDK');
-                alert('Voice assistant could not be loaded. Please refresh the page.');
-            };
-            document.head.appendChild(script);
+            });
 
             function initVapi() {
                 console.log('Initializing VAPI...');
