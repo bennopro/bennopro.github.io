@@ -218,19 +218,17 @@
         </div>
     </footer>
 
-    <!-- VAPI SDK -->
-    <script src="https://cdn.jsdelivr.net/npm/@vapi-ai/web@2.4.2/dist/index.min.js"></script>
+    <!-- VAPI Web SDK -->
+    <script src="https://cdn.jsdelivr.net/npm/vapi-ai@latest/dist/index.umd.js"></script>
 
-    <script type="module">
-        // Import VAPI SDK
-        import Vapi from 'https://cdn.jsdelivr.net/npm/@vapi-ai/web@2.4.2/dist/index.js';
+    <script>
+        // Wait for DOM and VAPI to load
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('DOM loaded, checking for VAPI...');
+            console.log('window.Vapi:', window.Vapi);
 
-        // Wait for DOM to load
-        window.addEventListener('DOMContentLoaded', function() {
-            console.log('Initializing VAPI...');
-
-            // VAPI Configuration
-            const vapi = new Vapi('2aa3e6db-8f83-4729-b9fc-6541a14ae98d');
+            // Initialize VAPI
+            const vapi = new window.Vapi('2aa3e6db-8f83-4729-b9fc-6541a14ae98d');
 
             console.log('VAPI initialized:', vapi);
 
@@ -239,7 +237,10 @@
                 console.log('Starting call...');
 
                 try {
-                    vapi.start('3966c02d-58b3-46da-9ef2-72b0baa97554');
+                    // Start call with assistant ID
+                    vapi.start({
+                        assistantId: '3966c02d-58b3-46da-9ef2-72b0baa97554'
+                    });
 
                     // Show call status
                     document.getElementById('callStatus').classList.add('active');
