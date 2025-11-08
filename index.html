@@ -106,12 +106,6 @@
             font-size: 1.3em;
             margin-bottom: 30px;
         }
-        .phone-number {
-            font-size: 2em;
-            color: #ff6b6b;
-            font-weight: bold;
-            margin: 20px 0;
-        }
         /* Footer */
         footer {
             background: #333;
@@ -194,60 +188,75 @@
             <p>&copy; 2024 Professionelle Büroreinigung. Alle Rechte vorbehalten.</p>
         </div>
     </footer>
-    <!-- VAPI Web SDK -->
-    <script src="https://unpkg.com/@vapi-ai/web@2.4.3/dist/index.umd.min.js"></script>
+
+    <!-- VAPI Web SDK - Wichtig: Zuerst laden -->
     <script>
-        (function() {
-            window.addEventListener('load', function() {
-                console.log('Page loaded, initializing VAPI...');
-                console.log('window.vapiSDK:', window.vapiSDK);
-                
-                if (!window.vapiSDK) {
-                    console.error('VAPI SDK not available');
-                    alert('Voice assistant could not be loaded. Please refresh the page.');
+        // Warte darauf, dass das VAPI SDK vollständig geladen ist
+        function waitForVapiSDK() {
+            return new Promise((resolve, reject) => {
+                // Prüfe ob SDK bereits verfügbar ist
+                if (window.vapiSDK) {
+                    resolve();
                     return;
                 }
                 
-                initVapi();
-            });
-
-            function initVapi() {
-                console.log('Initializing VAPI...');
+                // Warte maximal 10 Sekunden
+                let attempts = 0;
+                const maxAttempts = 100;
                 
-                // Versuche beide Initialisierungsmethoden
+                const checkInterval = setInterval(() => {
+                    attempts++;
+                    console.log('Checking for VAPI SDK... Attempt', attempts);
+                    
+                    if (window.vapiSDK) {
+                        clearInterval(checkInterval);
+                        console.log('VAPI SDK loaded successfully!');
+                        resolve();
+                    } else if (attempts >= maxAttempts) {
+                        clearInterval(checkInterval);
+                        reject(new Error('VAPI SDK failed to load after 10 seconds'));
+                    }
+                }, 100);
+            });
+        }
+
+        // Initialisiere VAPI nachdem das SDK geladen ist
+        async function initVapi() {
+            try {
+                console.log('Waiting for VAPI SDK...');
+                await waitForVapiSDK();
+                
+                console.log('Initializing VAPI...');
+                console.log('window.vapiSDK:', window.vapiSDK);
+                
+                // Dein neuer Public Key
+                const PUBLIC_KEY = '0f657d43-6662-4bd6-b23b-fd00c2f2d110';
+                const ASSISTANT_ID = '3966c02d-58b3-46da-9ef2-72b0baa97554';
+                
+                // Initialisiere VAPI - versuche verschiedene Methoden
                 let vapi;
                 try {
-                    // Methode 1: Direkter Zugriff
-                    vapi = new window.vapiSDK.Vapi('0f657d43-6662-4bd6-b23b-fd00c2f2d110');
-                    console.log('VAPI initialized with direct access');
+                    vapi = new window.vapiSDK.Vapi(PUBLIC_KEY);
+                    console.log('VAPI initialized with Vapi constructor');
                 } catch (e) {
-                    console.log('Direct access failed, trying default export...');
-                    try {
-                        // Methode 2: Default Export
-                        vapi = new window.vapiSDK.default('2aa3e6db-8f83-4729-b9fc-6541a14ae98d');
-                        console.log('VAPI initialized with default export');
-                    } catch (e2) {
-                        console.error('Both initialization methods failed:', e, e2);
-                        alert('Fehler beim Initialisieren des Voice Assistants');
-                        return;
-                    }
+                    console.log('Vapi constructor failed, trying default...');
+                    vapi = new window.vapiSDK.default(PUBLIC_KEY);
+                    console.log('VAPI initialized with default constructor');
                 }
                 
-                console.log('VAPI initialized:', vapi);
+                console.log('VAPI instance:', vapi);
 
+                // Funktion zum Starten des Anrufs
                 function startCall() {
                     console.log('Starting call...');
                     try {
-                        // Start call mit Konfigurationsobjekt
-                        vapi.start({
-                            assistantId: '3966c02d-58b3-46da-9ef2-72b0baa97554'
-                        });
+                        vapi.start(ASSISTANT_ID);
                         
-                        // Show call status
+                        // Zeige Status an
                         document.getElementById('callStatus').classList.add('active');
                         document.getElementById('callStatus2').classList.add('active');
                         
-                        // Update button text
+                        // Update Buttons
                         document.getElementById('startCallButton').textContent = 'Anruf läuft...';
                         document.getElementById('startCallButton2').textContent = 'Anruf läuft...';
                         document.getElementById('startCallButton').disabled = true;
@@ -258,7 +267,7 @@
                     }
                 }
 
-                // Event listeners for both buttons
+                // Event Listeners für Buttons
                 document.getElementById('startCallButton').addEventListener('click', startCall);
                 document.getElementById('startCallButton2').addEventListener('click', startCall);
                 console.log('Button event listeners added');
@@ -275,7 +284,6 @@
                     document.getElementById('callStatus').textContent = 'Anruf beendet. Vielen Dank!';
                     document.getElementById('callStatus2').textContent = 'Anruf beendet. Vielen Dank!';
                     
-                    // Reset buttons after 3 seconds
                     setTimeout(() => {
                         document.getElementById('callStatus').classList.remove('active');
                         document.getElementById('callStatus2').classList.remove('active');
@@ -288,14 +296,14 @@
 
                 vapi.on('error', (error) => {
                     console.error('VAPI Error:', error);
-                    document.getElementById('callStatus').textContent = 'Fehler: ' + (error.message || 'Bitte versuchen Sie es erneut.');
-                    document.getElementById('callStatus2').textContent = 'Fehler: ' + (error.message || 'Bitte versuchen Sie es erneut.');
+                    const errorMsg = 'Fehler: ' + (error.message || 'Bitte versuchen Sie es erneut.');
+                    document.getElementById('callStatus').textContent = errorMsg;
+                    document.getElementById('callStatus2').textContent = errorMsg;
                     document.getElementById('callStatus').style.background = '#ffebee';
                     document.getElementById('callStatus').style.color = '#c62828';
                     document.getElementById('callStatus2').style.background = '#ffebee';
                     document.getElementById('callStatus2').style.color = '#c62828';
                     
-                    // Reset after 3 seconds
                     setTimeout(() => {
                         document.getElementById('callStatus').classList.remove('active');
                         document.getElementById('callStatus2').classList.remove('active');
@@ -310,7 +318,6 @@
                     }, 3000);
                 });
 
-                // Optional: Show speech status
                 vapi.on('speech-start', () => {
                     console.log('Assistant started speaking');
                 });
@@ -322,8 +329,22 @@
                 vapi.on('message', (message) => {
                     console.log('VAPI message:', message);
                 });
+                
+            } catch (error) {
+                console.error('Failed to initialize VAPI:', error);
+                alert('Voice Assistant konnte nicht geladen werden. Bitte laden Sie die Seite neu.');
             }
-        })();
+        }
+
+        // Starte Initialisierung wenn DOM bereit ist
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', initVapi);
+        } else {
+            initVapi();
+        }
     </script>
+    
+    <!-- VAPI SDK Script - Am Ende laden -->
+    <script src="https://unpkg.com/@vapi-ai/web@2.4.2/dist/index.umd.min.js"></script>
 </body>
 </html>
