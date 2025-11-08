@@ -55,10 +55,6 @@
         .cta-button:active {
             transform: translateY(-1px);
         }
-        .cta-button:disabled {
-            opacity: 0.6;
-            cursor: not-allowed;
-        }
         /* Benefits Section */
         .benefits {
             padding: 80px 0;
@@ -113,19 +109,6 @@
             text-align: center;
             padding: 30px 0;
         }
-        /* Call Status */
-        .call-status {
-            display: none;
-            margin-top: 20px;
-            padding: 15px;
-            background: #e8f5e9;
-            border-radius: 10px;
-            color: #2e7d32;
-            font-weight: bold;
-        }
-        .call-status.active {
-            display: block;
-        }
         @media (max-width: 768px) {
             header h1 {
                 font-size: 2em;
@@ -144,8 +127,9 @@
         <div class="container">
             <h1>Professionelle Büroreinigung</h1>
             <p>Sauberkeit, auf die Sie sich verlassen können</p>
-            <button class="cta-button" id="startCallButton">Jetzt kostenlos beraten lassen</button>
-            <div class="call-status" id="callStatus">Verbinde mit Beraterin Lisa...</div>
+            <button class="cta-button" onclick="document.getElementById('vapiWidget').click()">
+                Jetzt kostenlos beraten lassen
+            </button>
         </div>
     </header>
     <section class="benefits">
@@ -179,8 +163,9 @@
         <div class="container">
             <h2>Interessiert?</h2>
             <p>Klicken Sie auf den Button für eine kostenlose telefonische Beratung!</p>
-            <button class="cta-button" id="startCallButton2">Kostenlose Beratung starten</button>
-            <div class="call-status" id="callStatus2">Verbinde mit Beraterin Lisa...</div>
+            <button class="cta-button" onclick="document.getElementById('vapiWidget').click()">
+                Kostenlose Beratung starten
+            </button>
         </div>
     </section>
     <footer>
@@ -189,111 +174,25 @@
         </div>
     </footer>
 
-    <!-- Import Map für ES Modules -->
-    <script type="importmap">
-    {
-        "imports": {
-            "@vapi-ai/web": "https://cdn.jsdelivr.net/npm/@vapi-ai/web@2.4.0/dist/index.js"
-        }
-    }
-    </script>
-
-    <!-- Vapi Integration als ES Module -->
-    <script type="module">
-        import Vapi from '@vapi-ai/web';
-
-        const PUBLIC_KEY = '0f657d43-6662-4bd6-b23b-fd00c2f2d110';
-        const ASSISTANT_ID = '3966c02d-58b3-46da-9ef2-72b0baa97554';
-
-        console.log('Initializing Vapi...');
-        const vapi = new Vapi(PUBLIC_KEY);
-        console.log('Vapi initialized:', vapi);
-
-        function startCall() {
-            console.log('Starting call...');
-            
-            try {
-                // Zeige Status
-                document.getElementById('callStatus').classList.add('active');
-                document.getElementById('callStatus2').classList.add('active');
-                
-                // Update Buttons
-                document.getElementById('startCallButton').textContent = 'Anruf läuft...';
-                document.getElementById('startCallButton2').textContent = 'Anruf läuft...';
-                document.getElementById('startCallButton').disabled = true;
-                document.getElementById('startCallButton2').disabled = true;
-
-                // Starte Anruf
-                vapi.start(ASSISTANT_ID);
-                console.log('Call started');
-            } catch (error) {
-                console.error('Error starting call:', error);
-                alert('Fehler beim Starten: ' + error.message);
-            }
-        }
-
-        // Event Listeners
-        document.getElementById('startCallButton').addEventListener('click', startCall);
-        document.getElementById('startCallButton2').addEventListener('click', startCall);
-        console.log('Button listeners added');
-
-        // VAPI Events
-        vapi.on('call-start', () => {
-            console.log('Call has started');
-            document.getElementById('callStatus').textContent = '📞 Gespräch läuft...';
-            document.getElementById('callStatus2').textContent = '📞 Gespräch läuft...';
-        });
-
-        vapi.on('call-end', () => {
-            console.log('Call has ended');
-            document.getElementById('callStatus').textContent = 'Anruf beendet. Vielen Dank!';
-            document.getElementById('callStatus2').textContent = 'Anruf beendet. Vielen Dank!';
-            
-            setTimeout(() => {
-                document.getElementById('callStatus').classList.remove('active');
-                document.getElementById('callStatus2').classList.remove('active');
-                document.getElementById('startCallButton').textContent = 'Jetzt kostenlos beraten lassen';
-                document.getElementById('startCallButton2').textContent = 'Kostenlose Beratung starten';
-                document.getElementById('startCallButton').disabled = false;
-                document.getElementById('startCallButton2').disabled = false;
-            }, 3000);
-        });
-
-        vapi.on('error', (error) => {
-            console.error('VAPI Error:', error);
-            const errorMsg = 'Fehler: ' + (error.message || 'Bitte versuchen Sie es erneut.');
-            document.getElementById('callStatus').textContent = errorMsg;
-            document.getElementById('callStatus2').textContent = errorMsg;
-            document.getElementById('callStatus').style.background = '#ffebee';
-            document.getElementById('callStatus').style.color = '#c62828';
-            document.getElementById('callStatus2').style.background = '#ffebee';
-            document.getElementById('callStatus2').style.color = '#c62828';
-            
-            setTimeout(() => {
-                document.getElementById('callStatus').classList.remove('active');
-                document.getElementById('callStatus2').classList.remove('active');
-                document.getElementById('callStatus').style.background = '#e8f5e9';
-                document.getElementById('callStatus').style.color = '#2e7d32';
-                document.getElementById('callStatus2').style.background = '#e8f5e9';
-                document.getElementById('callStatus2').style.color = '#2e7d32';
-                document.getElementById('startCallButton').textContent = 'Jetzt kostenlos beraten lassen';
-                document.getElementById('startCallButton2').textContent = 'Kostenlose Beratung starten';
-                document.getElementById('startCallButton').disabled = false;
-                document.getElementById('startCallButton2').disabled = false;
-            }, 3000);
-        });
-
-        vapi.on('speech-start', () => {
-            console.log('Assistant started speaking');
-        });
-
-        vapi.on('speech-end', () => {
-            console.log('Assistant stopped speaking');
-        });
-
-        vapi.on('message', (message) => {
-            console.log('VAPI message:', message);
-        });
-    </script>
+    <!-- Vapi Widget SDK -->
+    <script src="https://unpkg.com/@vapi-ai/client-sdk-react/dist/embed/widget.umd.js"></script>
+    
+    <!-- Vapi Widget - wird als Floating Button angezeigt -->
+    <vapi-widget 
+        id="vapiWidget"
+        public-key="0f657d43-6662-4bd6-b23b-fd00c2f2d110"
+        assistant-id="3966c02d-58b3-46da-9ef2-72b0baa97554"
+        mode="voice"
+        size="tiny"
+        position="bottom-right"
+        title="Beraterin Lisa"
+        cta-title="Jetzt anrufen"
+        cta-subtitle="Kostenlose Beratung"
+        start-button-text="Anruf starten"
+        end-button-text="Auflegen"
+        accent-color="#ff6b6b"
+        cta-button-color="#667eea"
+        cta-button-text-color="#ffffff"
+    ></vapi-widget>
 </body>
 </html>
