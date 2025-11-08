@@ -109,6 +109,18 @@
             text-align: center;
             padding: 30px 0;
         }
+        
+        /* Vapi Button Override - Inline positioning */
+        .vapi-btn {
+            position: relative !important;
+            display: inline-block !important;
+            margin: 0 auto !important;
+            left: auto !important;
+            right: auto !important;
+            bottom: auto !important;
+            top: auto !important;
+        }
+        
         @media (max-width: 768px) {
             header h1 {
                 font-size: 2em;
@@ -127,9 +139,8 @@
         <div class="container">
             <h1>Professionelle Büroreinigung</h1>
             <p>Sauberkeit, auf die Sie sich verlassen können</p>
-            <button class="cta-button" onclick="if(window.vapiInstance) window.vapiInstance.start()">
-                Jetzt kostenlos beraten lassen
-            </button>
+            <!-- Widget wird hier erscheinen -->
+            <div id="vapi-button-1"></div>
         </div>
     </header>
     <section class="benefits">
@@ -163,9 +174,8 @@
         <div class="container">
             <h2>Interessiert?</h2>
             <p>Klicken Sie auf den Button für eine kostenlose telefonische Beratung!</p>
-            <button class="cta-button" onclick="if(window.vapiInstance) window.vapiInstance.start()">
-                Kostenlose Beratung starten
-            </button>
+            <!-- Widget wird auch hier erscheinen -->
+            <div id="vapi-button-2"></div>
         </div>
     </section>
     <footer>
@@ -174,32 +184,33 @@
         </div>
     </footer>
 
-    <!-- Vapi Widget - Offizielle Integration -->
+    <!-- Vapi Widget - Inline an beiden Stellen -->
     <script>
         var vapiInstance = null;
-        const assistant = "3966c02d-58b3-46da-9ef2-72b0baa97554"; // Deine Assistant ID
-        const apiKey = "0f657d43-6662-4bd6-b23b-fd00c2f2d110"; // Dein Public Key
+        const assistant = "3966c02d-58b3-46da-9ef2-72b0baa97554";
+        const apiKey = "0f657d43-6662-4bd6-b23b-fd00c2f2d110";
+        
+        // Konfiguration für INLINE Button (nicht floating)
         const buttonConfig = {
-            position: "bottom-right", // Position des Widgets
-            offset: "40px", // Abstand vom Rand
-            width: "50px", // Breite des Buttons
-            height: "50px", // Höhe des Buttons
+            position: "relative", // Inline statt floating
+            width: "auto",
+            height: "auto",
             idle: {
-                color: `rgb(102, 126, 234)`, // Farbe wenn inaktiv
-                type: "pill", // oder "round"
-                title: "Hast du eine Frage?", // Hover Text
-                subtitle: "Rede mit uns", // Untertitel
-                icon: `https://unpkg.com/lucide-static@0.321.0/icons/phone.svg`, // Icon
+                color: `rgb(255, 107, 107)`, // Rot wie deine CTAs
+                type: "pill",
+                title: "Jetzt kostenlos beraten lassen",
+                subtitle: "Klicken um zu starten",
+                icon: `https://unpkg.com/lucide-static@0.321.0/icons/phone.svg`,
             },
             loading: {
-                color: `rgb(255, 107, 107)`, // Farbe beim Laden
+                color: `rgb(255, 107, 107)`,
                 type: "pill",
                 title: "Verbinde...",
                 subtitle: "Bitte warten",
                 icon: `https://unpkg.com/lucide-static@0.321.0/icons/loader-2.svg`,
             },
             active: {
-                color: `rgb(102, 234, 126)`, // Farbe während Anruf
+                color: `rgb(102, 234, 126)`,
                 type: "pill",
                 title: "Im Gespräch...",
                 subtitle: "Zum Beenden klicken",
@@ -210,26 +221,63 @@
         (function (d, t) {
             var g = document.createElement(t),
                 s = d.getElementsByTagName(t)[0];
-            g.src =
-                "https://cdn.jsdelivr.net/gh/VapiAI/html-script-tag@latest/dist/assets/index.js";
+            g.src = "https://cdn.jsdelivr.net/gh/VapiAI/html-script-tag@latest/dist/assets/index.js";
             g.defer = true;
             g.async = true;
             s.parentNode.insertBefore(g, s);
 
             g.onload = function () {
                 vapiInstance = window.vapiSDK.run({
-                    apiKey: apiKey, // required
-                    assistant: assistant, // required
-                    config: buttonConfig, // optional
+                    apiKey: apiKey,
+                    assistant: assistant,
+                    config: buttonConfig,
                 });
                 
                 console.log('Vapi Widget loaded successfully!', vapiInstance);
+                
+                // Warte bis Button erstellt wurde, dann verschiebe ihn
+                setTimeout(function() {
+                    moveVapiButton();
+                }, 500);
             };
             
             g.onerror = function() {
                 console.error('Failed to load Vapi SDK');
             };
         })(document, "script");
+        
+        // Funktion um den Vapi Button zu verschieben
+        function moveVapiButton() {
+            const vapiBtn = document.querySelector('.vapi-btn');
+            
+            if (vapiBtn) {
+                // Klone den Button für die zweite Position
+                const btnClone = vapiBtn.cloneNode(true);
+                
+                // Setze Original in erste Position
+                const container1 = document.getElementById('vapi-button-1');
+                if (container1) {
+                    container1.appendChild(vapiBtn);
+                }
+                
+                // Setze Klon in zweite Position
+                const container2 = document.getElementById('vapi-button-2');
+                if (container2) {
+                    container2.appendChild(btnClone);
+                    
+                    // Click Event für geklonten Button
+                    btnClone.addEventListener('click', function() {
+                        if (vapiInstance) {
+                            vapiInstance.start();
+                        }
+                    });
+                }
+                
+                console.log('Vapi buttons positioned inline');
+            } else {
+                console.error('Vapi button not found');
+            }
+        }
     </script>
 </body>
 </html>
