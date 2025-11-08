@@ -10,19 +10,16 @@
             padding: 0;
             box-sizing: border-box;
         }
-
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             line-height: 1.6;
             color: #333;
         }
-
         .container {
             max-width: 1200px;
             margin: 0 auto;
             padding: 0 20px;
         }
-
         /* Header */
         header {
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
@@ -30,17 +27,14 @@
             padding: 100px 0;
             text-align: center;
         }
-
         header h1 {
             font-size: 3em;
             margin-bottom: 20px;
         }
-
         header p {
             font-size: 1.5em;
             margin-bottom: 30px;
         }
-
         .cta-button {
             display: inline-block;
             background: #ff6b6b;
@@ -54,35 +48,33 @@
             cursor: pointer;
             border: none;
         }
-
         .cta-button:hover {
             transform: translateY(-3px);
             box-shadow: 0 10px 20px rgba(0,0,0,0.2);
         }
-
         .cta-button:active {
             transform: translateY(-1px);
         }
-
+        .cta-button:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
         /* Benefits Section */
         .benefits {
             padding: 80px 0;
             background: #f8f9fa;
         }
-
         .benefits h2 {
             text-align: center;
             font-size: 2.5em;
             margin-bottom: 50px;
             color: #667eea;
         }
-
         .benefits-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
             gap: 40px;
         }
-
         .benefit-card {
             background: white;
             padding: 30px;
@@ -90,43 +82,36 @@
             box-shadow: 0 5px 15px rgba(0,0,0,0.1);
             text-align: center;
         }
-
         .benefit-card h3 {
             font-size: 1.5em;
             margin-bottom: 15px;
             color: #667eea;
         }
-
         .icon {
             font-size: 3em;
             margin-bottom: 20px;
         }
-
         /* Contact Section */
         .contact {
             padding: 80px 0;
             text-align: center;
             background: white;
         }
-
         .contact h2 {
             font-size: 2.5em;
             margin-bottom: 20px;
             color: #667eea;
         }
-
         .contact p {
             font-size: 1.3em;
             margin-bottom: 30px;
         }
-
         .phone-number {
             font-size: 2em;
             color: #ff6b6b;
             font-weight: bold;
             margin: 20px 0;
         }
-
         /* Footer */
         footer {
             background: #333;
@@ -134,7 +119,6 @@
             text-align: center;
             padding: 30px 0;
         }
-
         /* Call Status */
         .call-status {
             display: none;
@@ -145,20 +129,16 @@
             color: #2e7d32;
             font-weight: bold;
         }
-
         .call-status.active {
             display: block;
         }
-
         @media (max-width: 768px) {
             header h1 {
                 font-size: 2em;
             }
-
             header p {
                 font-size: 1.2em;
             }
-
             .benefits h2, .contact h2 {
                 font-size: 2em;
             }
@@ -174,7 +154,6 @@
             <div class="call-status" id="callStatus">Verbinde mit Beraterin Lisa...</div>
         </div>
     </header>
-
     <section class="benefits">
         <div class="container">
             <h2>Warum wir?</h2>
@@ -202,7 +181,6 @@
             </div>
         </div>
     </section>
-
     <section class="contact" id="kontakt">
         <div class="container">
             <h2>Interessiert?</h2>
@@ -211,52 +189,64 @@
             <div class="call-status" id="callStatus2">Verbinde mit Beraterin Lisa...</div>
         </div>
     </section>
-
     <footer>
         <div class="container">
             <p>&copy; 2024 Professionelle Büroreinigung. Alle Rechte vorbehalten.</p>
         </div>
     </footer>
-
     <!-- VAPI Web SDK -->
-    <script src="https://unpkg.com/@vapi-ai/web@2.4.2/dist/index.umd.min.js"></script>
-
+    <script src="https://cdn.jsdelivr.net/npm/@vapi-ai/web@latest/dist/index.umd.min.js"></script>
     <script>
         (function() {
-            // Wait for page to load
             window.addEventListener('load', function() {
                 console.log('Page loaded, initializing VAPI...');
                 console.log('window.vapiSDK:', window.vapiSDK);
-
+                
                 if (!window.vapiSDK) {
                     console.error('VAPI SDK not available');
                     alert('Voice assistant could not be loaded. Please refresh the page.');
                     return;
                 }
-
+                
                 initVapi();
             });
 
             function initVapi() {
                 console.log('Initializing VAPI...');
-
-                // Initialize VAPI
-                const vapi = new window.vapiSDK.default('2aa3e6db-8f83-4729-b9fc-6541a14ae98d');
-
+                
+                // Versuche beide Initialisierungsmethoden
+                let vapi;
+                try {
+                    // Methode 1: Direkter Zugriff
+                    vapi = new window.vapiSDK.Vapi('0f657d43-6662-4bd6-b23b-fd00c2f2d110');
+                    console.log('VAPI initialized with direct access');
+                } catch (e) {
+                    console.log('Direct access failed, trying default export...');
+                    try {
+                        // Methode 2: Default Export
+                        vapi = new window.vapiSDK.default('2aa3e6db-8f83-4729-b9fc-6541a14ae98d');
+                        console.log('VAPI initialized with default export');
+                    } catch (e2) {
+                        console.error('Both initialization methods failed:', e, e2);
+                        alert('Fehler beim Initialisieren des Voice Assistants');
+                        return;
+                    }
+                }
+                
                 console.log('VAPI initialized:', vapi);
 
-                // Function to start call
                 function startCall() {
                     console.log('Starting call...');
-
                     try {
-                        // Start call with assistant ID
-                        vapi.start('3966c02d-58b3-46da-9ef2-72b0baa97554');
-
+                        // Start call mit Konfigurationsobjekt
+                        vapi.start({
+                            assistantId: '3966c02d-58b3-46da-9ef2-72b0baa97554'
+                        });
+                        
                         // Show call status
                         document.getElementById('callStatus').classList.add('active');
                         document.getElementById('callStatus2').classList.add('active');
-
+                        
                         // Update button text
                         document.getElementById('startCallButton').textContent = 'Anruf läuft...';
                         document.getElementById('startCallButton2').textContent = 'Anruf läuft...';
@@ -271,7 +261,6 @@
                 // Event listeners for both buttons
                 document.getElementById('startCallButton').addEventListener('click', startCall);
                 document.getElementById('startCallButton2').addEventListener('click', startCall);
-
                 console.log('Button event listeners added');
 
                 // VAPI Event Listeners
@@ -285,7 +274,7 @@
                     console.log('Call has ended');
                     document.getElementById('callStatus').textContent = 'Anruf beendet. Vielen Dank!';
                     document.getElementById('callStatus2').textContent = 'Anruf beendet. Vielen Dank!';
-
+                    
                     // Reset buttons after 3 seconds
                     setTimeout(() => {
                         document.getElementById('callStatus').classList.remove('active');
@@ -299,17 +288,21 @@
 
                 vapi.on('error', (error) => {
                     console.error('VAPI Error:', error);
-                    document.getElementById('callStatus').textContent = 'Fehler beim Verbinden. Bitte versuchen Sie es erneut.';
-                    document.getElementById('callStatus2').textContent = 'Fehler beim Verbinden. Bitte versuchen Sie es erneut.';
+                    document.getElementById('callStatus').textContent = 'Fehler: ' + (error.message || 'Bitte versuchen Sie es erneut.');
+                    document.getElementById('callStatus2').textContent = 'Fehler: ' + (error.message || 'Bitte versuchen Sie es erneut.');
                     document.getElementById('callStatus').style.background = '#ffebee';
                     document.getElementById('callStatus').style.color = '#c62828';
                     document.getElementById('callStatus2').style.background = '#ffebee';
                     document.getElementById('callStatus2').style.color = '#c62828';
-
+                    
                     // Reset after 3 seconds
                     setTimeout(() => {
                         document.getElementById('callStatus').classList.remove('active');
                         document.getElementById('callStatus2').classList.remove('active');
+                        document.getElementById('callStatus').style.background = '#e8f5e9';
+                        document.getElementById('callStatus').style.color = '#2e7d32';
+                        document.getElementById('callStatus2').style.background = '#e8f5e9';
+                        document.getElementById('callStatus2').style.color = '#2e7d32';
                         document.getElementById('startCallButton').textContent = 'Jetzt kostenlos beraten lassen';
                         document.getElementById('startCallButton2').textContent = 'Kostenlose Beratung starten';
                         document.getElementById('startCallButton').disabled = false;
