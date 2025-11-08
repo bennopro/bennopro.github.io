@@ -486,15 +486,63 @@
             color: rgba(255,255,255,0.7);
         }
 
-        /* Vapi Button Override - Inline positioning */
+        /* Vapi Button Override - Enhanced Styling */
         .vapi-btn {
             position: relative !important;
             display: inline-block !important;
-            margin: 0 auto !important;
+            margin: 20px auto !important;
             left: auto !important;
             right: auto !important;
             bottom: auto !important;
             top: auto !important;
+            transform: scale(1);
+            transition: all 0.3s ease !important;
+            box-shadow: 0 10px 40px rgba(99, 102, 241, 0.3) !important;
+            border-radius: 16px !important;
+            overflow: hidden !important;
+            background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%) !important;
+            padding: 8px !important;
+        }
+
+        .vapi-btn:hover {
+            transform: scale(1.05) translateY(-3px) !important;
+            box-shadow: 0 15px 50px rgba(99, 102, 241, 0.4) !important;
+        }
+
+        .vapi-btn:active {
+            transform: scale(1.02) translateY(-1px) !important;
+        }
+
+        /* Add glow effect */
+        .vapi-btn::before {
+            content: '';
+            position: absolute;
+            top: -2px;
+            left: -2px;
+            right: -2px;
+            bottom: -2px;
+            background: linear-gradient(135deg, #6366f1, #8b5cf6, #ec4899);
+            border-radius: 16px;
+            z-index: -1;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            filter: blur(10px);
+        }
+
+        .vapi-btn:hover::before {
+            opacity: 0.7;
+        }
+
+        /* Style the inner content */
+        .vapi-btn > div {
+            background: white !important;
+            border-radius: 12px !important;
+            padding: 24px 40px !important;
+            min-width: 320px !important;
+        }
+
+        .vapi-btn svg {
+            filter: drop-shadow(0 2px 4px rgba(99, 102, 241, 0.3)) !important;
         }
 
         /* Mobile Menu */
