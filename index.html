@@ -938,9 +938,17 @@
             };
         })(document, "script");
 
+        let isProcessing = false; // Prevent multiple simultaneous clicks
+
         // Custom button click handler
         function startCall(button) {
             console.log('Button clicked, vapiInstance:', vapiInstance);
+
+            // Prevent multiple simultaneous clicks
+            if (isProcessing) {
+                console.log('Already processing, ignoring click');
+                return;
+            }
 
             if (!vapiInstance) {
                 console.error('Vapi instance not initialized yet');
@@ -951,6 +959,7 @@
             if (!isCallActive) {
                 // Start call
                 console.log('Starting call...');
+                isProcessing = true;
                 updateButtonState('loading');
 
                 try {
@@ -961,21 +970,28 @@
                     // Update to active state after a short delay
                     setTimeout(function() {
                         updateButtonState('active');
+                        isProcessing = false;
                     }, 1000);
                 } catch (error) {
                     console.error('Error starting call:', error);
                     updateButtonState('idle');
+                    isProcessing = false;
                     alert('Fehler beim Starten des Anrufs: ' + error.message);
                 }
             } else {
                 // End call
                 console.log('Ending call...');
+                isProcessing = true;
                 try {
                     vapiInstance.stop();
                     isCallActive = false;
                     updateButtonState('idle');
+                    setTimeout(function() {
+                        isProcessing = false;
+                    }, 500);
                 } catch (error) {
                     console.error('Error stopping call:', error);
+                    isProcessing = false;
                 }
             }
         }
