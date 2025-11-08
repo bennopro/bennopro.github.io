@@ -890,64 +890,93 @@
     </footer>
 
     <!-- Vapi SDK and Custom Button Handler -->
-    <script src="https://cdn.jsdelivr.net/gh/VapiAI/html-script-tag@latest/dist/assets/index.js"></script>
     <script>
         var vapiInstance = null;
         const assistant = "3966c02d-58b3-46da-9ef2-72b0baa97554";
         const apiKey = "0f657d43-6662-4bd6-b23b-fd00c2f2d110";
         let isCallActive = false;
 
-        // Initialize Vapi SDK (hidden)
-        window.addEventListener('DOMContentLoaded', function() {
-            if (window.vapiSDK) {
+        // Load Vapi SDK
+        (function (d, t) {
+            var g = document.createElement(t),
+                s = d.getElementsByTagName(t)[0];
+            g.src = "https://cdn.jsdelivr.net/gh/VapiAI/html-script-tag@latest/dist/assets/index.js";
+            g.defer = true;
+            g.async = true;
+            s.parentNode.insertBefore(g, s);
+
+            g.onload = function () {
+                console.log('Vapi SDK loaded');
+
+                // Initialize with hidden button
                 vapiInstance = window.vapiSDK.run({
                     apiKey: apiKey,
                     assistant: assistant,
                     config: {
                         position: "fixed",
-                        offset: "-9999px", // Hide it off screen
+                        offset: "0px",
+                        width: "0px",
+                        height: "0px",
+                        idle: {
+                            color: `rgb(99, 102, 241)`,
+                            type: "pill",
+                            title: "",
+                            subtitle: "",
+                        }
                     }
                 });
 
-                // Listen to call events
-                if (vapiInstance) {
-                    vapiInstance.on('call-start', function() {
-                        console.log('Call started');
-                        updateButtonState('active');
-                    });
+                console.log('Vapi instance created:', vapiInstance);
+            };
 
-                    vapiInstance.on('call-end', function() {
-                        console.log('Call ended');
-                        updateButtonState('idle');
-                    });
-                }
-            }
-        });
+            g.onerror = function() {
+                console.error('Failed to load Vapi SDK');
+            };
+        })(document, "script");
 
         // Custom button click handler
         function startCall(button) {
+            console.log('Button clicked, vapiInstance:', vapiInstance);
+
             if (!vapiInstance) {
-                console.error('Vapi instance not initialized');
+                console.error('Vapi instance not initialized yet');
+                alert('Bitte warten Sie einen Moment und versuchen Sie es erneut.');
                 return;
             }
 
             if (!isCallActive) {
                 // Start call
-                button.classList.add('loading');
-                updateButtonText(button, 'Verbinde...', 'Bitte einen Moment Geduld');
+                console.log('Starting call...');
+                updateButtonState('loading');
 
-                vapiInstance.start();
-                isCallActive = true;
+                try {
+                    vapiInstance.start();
+                    isCallActive = true;
+
+                    // Update to active state after a short delay
+                    setTimeout(function() {
+                        updateButtonState('active');
+                    }, 1000);
+                } catch (error) {
+                    console.error('Error starting call:', error);
+                    updateButtonState('idle');
+                }
             } else {
                 // End call
-                vapiInstance.stop();
-                isCallActive = false;
-                updateButtonState('idle');
+                console.log('Ending call...');
+                try {
+                    vapiInstance.stop();
+                    isCallActive = false;
+                    updateButtonState('idle');
+                } catch (error) {
+                    console.error('Error stopping call:', error);
+                }
             }
         }
 
         function updateButtonState(state) {
             const buttons = document.querySelectorAll('.custom-call-button');
+            console.log('Updating button state to:', state);
 
             buttons.forEach(button => {
                 button.classList.remove('loading', 'active');
