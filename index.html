@@ -486,63 +486,121 @@
             color: rgba(255,255,255,0.7);
         }
 
-        /* Vapi Button Override - Enhanced Styling */
+        /* Hide default Vapi button */
         .vapi-btn {
-            position: relative !important;
-            display: inline-block !important;
-            margin: 20px auto !important;
-            left: auto !important;
-            right: auto !important;
-            bottom: auto !important;
-            top: auto !important;
-            transform: scale(1);
-            transition: all 0.3s ease !important;
-            box-shadow: 0 10px 40px rgba(99, 102, 241, 0.3) !important;
-            border-radius: 16px !important;
-            overflow: hidden !important;
-            background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%) !important;
-            padding: 8px !important;
+            display: none !important;
         }
 
-        .vapi-btn:hover {
-            transform: scale(1.05) translateY(-3px) !important;
-            box-shadow: 0 15px 50px rgba(99, 102, 241, 0.4) !important;
+        /* Custom Call Button */
+        .custom-call-button {
+            display: inline-flex;
+            align-items: center;
+            gap: 16px;
+            background: white;
+            color: var(--dark-color);
+            padding: 24px 48px;
+            border-radius: 16px;
+            font-size: 1.2em;
+            font-weight: 700;
+            cursor: pointer;
+            border: none;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            position: relative;
+            overflow: hidden;
         }
 
-        .vapi-btn:active {
-            transform: scale(1.02) translateY(-1px) !important;
-        }
-
-        /* Add glow effect */
-        .vapi-btn::before {
+        .custom-call-button::before {
             content: '';
             position: absolute;
-            top: -2px;
-            left: -2px;
-            right: -2px;
-            bottom: -2px;
-            background: linear-gradient(135deg, #6366f1, #8b5cf6, #ec4899);
-            border-radius: 16px;
-            z-index: -1;
-            opacity: 0;
-            transition: opacity 0.3s ease;
-            filter: blur(10px);
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            transition: left 0.5s;
         }
 
-        .vapi-btn:hover::before {
-            opacity: 0.7;
+        .custom-call-button:hover::before {
+            left: 100%;
         }
 
-        /* Style the inner content */
-        .vapi-btn > div {
-            background: white !important;
-            border-radius: 12px !important;
-            padding: 24px 40px !important;
-            min-width: 320px !important;
+        .custom-call-button:hover {
+            transform: translateY(-5px) scale(1.02);
+            box-shadow: 0 20px 60px rgba(99, 102, 241, 0.3);
         }
 
-        .vapi-btn svg {
-            filter: drop-shadow(0 2px 4px rgba(99, 102, 241, 0.3)) !important;
+        .custom-call-button:active {
+            transform: translateY(-2px) scale(1);
+        }
+
+        .call-icon {
+            width: 28px;
+            height: 28px;
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                box-shadow: 0 0 0 0 rgba(99, 102, 241, 0.7);
+            }
+            50% {
+                box-shadow: 0 0 0 15px rgba(99, 102, 241, 0);
+            }
+        }
+
+        .call-icon svg {
+            width: 16px;
+            height: 16px;
+            fill: white;
+        }
+
+        .button-text {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 4px;
+        }
+
+        .button-title {
+            font-size: 1.1em;
+            line-height: 1;
+        }
+
+        .button-subtitle {
+            font-size: 0.7em;
+            font-weight: 500;
+            color: var(--gray-color);
+        }
+
+        /* Active call state */
+        .custom-call-button.active {
+            background: linear-gradient(135deg, #22c55e, #16a34a);
+            color: white;
+        }
+
+        .custom-call-button.active .button-subtitle {
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        .custom-call-button.active .call-icon {
+            background: rgba(255, 255, 255, 0.3);
+            animation: none;
+        }
+
+        /* Loading state */
+        .custom-call-button.loading .call-icon {
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
         }
 
         /* Mobile Menu */
@@ -609,8 +667,20 @@
                 <div class="hero-badge">✨ Professionelle Büroreinigung</div>
                 <h1>Sauberkeit, die beeindruckt</h1>
                 <p class="hero-subtitle">Zuverlässige Reinigungsservices für Ihr Büro – damit Sie sich auf das Wesentliche konzentrieren können</p>
-                <!-- Vapi Button Position 1 -->
-                <div class="cta-container" id="vapi-button-1"></div>
+                <!-- Custom Call Button -->
+                <div class="cta-container">
+                    <button class="custom-call-button" id="call-button-1" onclick="startCall(this)">
+                        <div class="call-icon">
+                            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M20.01 15.38c-1.23 0-2.42-.2-3.53-.56a.977.977 0 00-1.01.24l-1.57 1.97c-2.83-1.35-5.48-3.9-6.89-6.83l1.95-1.66c.27-.28.35-.67.24-1.02-.37-1.11-.56-2.3-.56-3.53 0-.54-.45-.99-.99-.99H4.19C3.65 3 3 3.24 3 3.99 3 13.28 10.73 21 20.01 21c.71 0 .99-.63.99-1.18v-3.45c0-.54-.45-.99-.99-.99z"/>
+                            </svg>
+                        </div>
+                        <div class="button-text">
+                            <span class="button-title">Kostenlose Beratung</span>
+                            <span class="button-subtitle">Jetzt anrufen und beraten lassen</span>
+                        </div>
+                    </button>
+                </div>
             </div>
         </div>
     </header>
@@ -765,8 +835,18 @@
         <div class="container">
             <h2>Bereit für ein sauberes Büro?</h2>
             <p>Klicken Sie auf den Button für eine kostenlose telefonische Beratung!</p>
-            <!-- Vapi Button Position 2 -->
-            <div id="vapi-button-2"></div>
+            <!-- Custom Call Button -->
+            <button class="custom-call-button" id="call-button-2" onclick="startCall(this)">
+                <div class="call-icon">
+                    <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M20.01 15.38c-1.23 0-2.42-.2-3.53-.56a.977.977 0 00-1.01.24l-1.57 1.97c-2.83-1.35-5.48-3.9-6.89-6.83l1.95-1.66c.27-.28.35-.67.24-1.02-.37-1.11-.56-2.3-.56-3.53 0-.54-.45-.99-.99-.99H4.19C3.65 3 3 3.24 3 3.99 3 13.28 10.73 21 20.01 21c.71 0 .99-.63.99-1.18v-3.45c0-.54-.45-.99-.99-.99z"/>
+                    </svg>
+                </div>
+                <div class="button-text">
+                    <span class="button-title">Kostenlose Beratung</span>
+                    <span class="button-subtitle">Jetzt anrufen und beraten lassen</span>
+                </div>
+            </button>
         </div>
     </section>
 
@@ -809,99 +889,89 @@
         </div>
     </footer>
 
-    <!-- Vapi Widget - Inline an beiden Stellen -->
+    <!-- Vapi SDK and Custom Button Handler -->
+    <script src="https://cdn.jsdelivr.net/gh/VapiAI/html-script-tag@latest/dist/assets/index.js"></script>
     <script>
         var vapiInstance = null;
         const assistant = "3966c02d-58b3-46da-9ef2-72b0baa97554";
         const apiKey = "0f657d43-6662-4bd6-b23b-fd00c2f2d110";
+        let isCallActive = false;
 
-        // Konfiguration für INLINE Button (nicht floating)
-        const buttonConfig = {
-            position: "relative", // Inline statt floating
-            width: "auto",
-            height: "auto",
-            idle: {
-                color: `rgb(99, 102, 241)`, // Purple gradient theme
-                type: "pill",
-                title: "📞 Kostenlose Beratung",
-                subtitle: "Jetzt anrufen und beraten lassen",
-                icon: `https://unpkg.com/lucide-static@0.321.0/icons/phone-call.svg`,
-            },
-            loading: {
-                color: `rgb(139, 92, 246)`,
-                type: "pill",
-                title: "Verbindung wird hergestellt...",
-                subtitle: "Bitte einen Moment Geduld",
-                icon: `https://unpkg.com/lucide-static@0.321.0/icons/loader-2.svg`,
-            },
-            active: {
-                color: `rgb(34, 197, 94)`,
-                type: "pill",
-                title: "✓ Verbunden",
-                subtitle: "Gespräch läuft - Zum Beenden klicken",
-                icon: `https://unpkg.com/lucide-static@0.321.0/icons/phone.svg`,
-            },
-        };
-
-        (function (d, t) {
-            var g = document.createElement(t),
-                s = d.getElementsByTagName(t)[0];
-            g.src = "https://cdn.jsdelivr.net/gh/VapiAI/html-script-tag@latest/dist/assets/index.js";
-            g.defer = true;
-            g.async = true;
-            s.parentNode.insertBefore(g, s);
-
-            g.onload = function () {
+        // Initialize Vapi SDK (hidden)
+        window.addEventListener('DOMContentLoaded', function() {
+            if (window.vapiSDK) {
                 vapiInstance = window.vapiSDK.run({
                     apiKey: apiKey,
                     assistant: assistant,
-                    config: buttonConfig,
+                    config: {
+                        position: "fixed",
+                        offset: "-9999px", // Hide it off screen
+                    }
                 });
 
-                console.log('Vapi Widget loaded successfully!', vapiInstance);
+                // Listen to call events
+                if (vapiInstance) {
+                    vapiInstance.on('call-start', function() {
+                        console.log('Call started');
+                        updateButtonState('active');
+                    });
 
-                // Warte bis Button erstellt wurde, dann verschiebe ihn
-                setTimeout(function() {
-                    moveVapiButton();
-                }, 500);
-            };
-
-            g.onerror = function() {
-                console.error('Failed to load Vapi SDK');
-            };
-        })(document, "script");
-
-        // Funktion um den Vapi Button zu verschieben
-        function moveVapiButton() {
-            const vapiBtn = document.querySelector('.vapi-btn');
-
-            if (vapiBtn) {
-                // Klone den Button für die zweite Position
-                const btnClone = vapiBtn.cloneNode(true);
-
-                // Setze Original in erste Position
-                const container1 = document.getElementById('vapi-button-1');
-                if (container1) {
-                    container1.appendChild(vapiBtn);
-                }
-
-                // Setze Klon in zweite Position
-                const container2 = document.getElementById('vapi-button-2');
-                if (container2) {
-                    container2.appendChild(btnClone);
-
-                    // Click Event für geklonten Button
-                    btnClone.addEventListener('click', function() {
-                        if (vapiInstance) {
-                            vapiInstance.start();
-                        }
+                    vapiInstance.on('call-end', function() {
+                        console.log('Call ended');
+                        updateButtonState('idle');
                     });
                 }
-
-                console.log('Vapi buttons positioned inline');
-            } else {
-                console.error('Vapi button not found');
             }
+        });
+
+        // Custom button click handler
+        function startCall(button) {
+            if (!vapiInstance) {
+                console.error('Vapi instance not initialized');
+                return;
+            }
+
+            if (!isCallActive) {
+                // Start call
+                button.classList.add('loading');
+                updateButtonText(button, 'Verbinde...', 'Bitte einen Moment Geduld');
+
+                vapiInstance.start();
+                isCallActive = true;
+            } else {
+                // End call
+                vapiInstance.stop();
+                isCallActive = false;
+                updateButtonState('idle');
+            }
+        }
+
+        function updateButtonState(state) {
+            const buttons = document.querySelectorAll('.custom-call-button');
+
+            buttons.forEach(button => {
+                button.classList.remove('loading', 'active');
+
+                if (state === 'active') {
+                    button.classList.add('active');
+                    updateButtonText(button, 'Verbunden ✓', 'Gespräch läuft - Zum Beenden klicken');
+                    isCallActive = true;
+                } else if (state === 'loading') {
+                    button.classList.add('loading');
+                    updateButtonText(button, 'Verbinde...', 'Bitte einen Moment Geduld');
+                } else {
+                    updateButtonText(button, 'Kostenlose Beratung', 'Jetzt anrufen und beraten lassen');
+                    isCallActive = false;
+                }
+            });
+        }
+
+        function updateButtonText(button, title, subtitle) {
+            const titleEl = button.querySelector('.button-title');
+            const subtitleEl = button.querySelector('.button-subtitle');
+
+            if (titleEl) titleEl.textContent = title;
+            if (subtitleEl) subtitleEl.textContent = subtitle;
         }
     </script>
 </body>
