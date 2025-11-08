@@ -4,112 +4,488 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Professionelle Büroreinigung - Sauber & Zuverlässig</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
     <style>
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
+
+        :root {
+            --primary-color: #6366f1;
+            --secondary-color: #8b5cf6;
+            --accent-color: #ec4899;
+            --dark-color: #0f172a;
+            --light-color: #f8fafc;
+            --gray-color: #64748b;
+        }
+
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
             line-height: 1.6;
-            color: #333;
+            color: var(--dark-color);
+            overflow-x: hidden;
         }
+
         .container {
-            max-width: 1200px;
+            max-width: 1280px;
             margin: 0 auto;
-            padding: 0 20px;
+            padding: 0 24px;
         }
-        /* Header */
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+
+        nav .container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 24px;
+        }
+
+        .logo {
+            font-size: 1.5em;
+            font-weight: 800;
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 32px;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: var(--dark-color);
+            text-decoration: none;
+            font-weight: 600;
+            transition: color 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: var(--primary-color);
+        }
+
+        /* Hero Section */
         header {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            position: relative;
+            overflow: hidden;
+            padding-top: 80px;
+        }
+
+        header::before {
+            content: '';
+            position: absolute;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 1px, transparent 1px);
+            background-size: 50px 50px;
+            animation: moveGrid 20s linear infinite;
+        }
+
+        @keyframes moveGrid {
+            0% { transform: translate(0, 0); }
+            100% { transform: translate(50px, 50px); }
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 1;
+            text-align: center;
             color: white;
-            padding: 100px 0;
+        }
+
+        .hero-badge {
+            display: inline-block;
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(10px);
+            padding: 8px 20px;
+            border-radius: 50px;
+            font-size: 0.9em;
+            font-weight: 600;
+            margin-bottom: 24px;
+            animation: fadeInDown 0.6s ease-out;
+        }
+
+        header h1 {
+            font-size: 4em;
+            font-weight: 800;
+            margin-bottom: 24px;
+            line-height: 1.1;
+            animation: fadeInUp 0.6s ease-out 0.2s backwards;
+        }
+
+        .hero-subtitle {
+            font-size: 1.5em;
+            margin-bottom: 40px;
+            opacity: 0.95;
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+            animation: fadeInUp 0.6s ease-out 0.4s backwards;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .cta-container {
+            animation: fadeInUp 0.6s ease-out 0.6s backwards;
+        }
+
+        /* Trust Section */
+        .trust-section {
+            padding: 60px 0;
+            background: white;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .trust-content {
             text-align: center;
         }
-        header h1 {
-            font-size: 3em;
-            margin-bottom: 20px;
+
+        .trust-text {
+            color: var(--gray-color);
+            font-size: 0.9em;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 32px;
         }
-        header p {
-            font-size: 1.5em;
-            margin-bottom: 30px;
+
+        .trust-stats {
+            display: flex;
+            justify-content: center;
+            gap: 60px;
+            flex-wrap: wrap;
         }
-        .cta-button {
-            display: inline-block;
-            background: #ff6b6b;
-            color: white;
-            padding: 15px 40px;
-            text-decoration: none;
-            border-radius: 50px;
-            font-size: 1.2em;
-            font-weight: bold;
-            transition: transform 0.3s, box-shadow 0.3s;
-            cursor: pointer;
-            border: none;
+
+        .stat {
+            text-align: center;
         }
-        .cta-button:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+
+        .stat-number {
+            font-size: 2.5em;
+            font-weight: 800;
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
         }
-        .cta-button:active {
-            transform: translateY(-1px);
+
+        .stat-label {
+            color: var(--gray-color);
+            font-weight: 600;
         }
+
         /* Benefits Section */
         .benefits {
-            padding: 80px 0;
-            background: #f8f9fa;
+            padding: 120px 0;
+            background: var(--light-color);
         }
-        .benefits h2 {
+
+        .section-header {
             text-align: center;
-            font-size: 2.5em;
-            margin-bottom: 50px;
-            color: #667eea;
+            margin-bottom: 80px;
         }
+
+        .section-badge {
+            display: inline-block;
+            color: var(--primary-color);
+            font-weight: 700;
+            font-size: 0.9em;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            margin-bottom: 16px;
+        }
+
+        .section-title {
+            font-size: 3em;
+            font-weight: 800;
+            margin-bottom: 16px;
+            color: var(--dark-color);
+        }
+
+        .section-description {
+            font-size: 1.2em;
+            color: var(--gray-color);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
         .benefits-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 32px;
+        }
+
+        .benefit-card {
+            background: white;
+            padding: 40px;
+            border-radius: 16px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            transition: all 0.3s ease;
+            border: 1px solid #e2e8f0;
+        }
+
+        .benefit-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+        }
+
+        .icon {
+            font-size: 3em;
+            margin-bottom: 24px;
+            display: inline-block;
+        }
+
+        .benefit-card h3 {
+            font-size: 1.5em;
+            margin-bottom: 16px;
+            color: var(--dark-color);
+            font-weight: 700;
+        }
+
+        .benefit-card p {
+            color: var(--gray-color);
+            line-height: 1.7;
+        }
+
+        /* Services Section */
+        .services {
+            padding: 120px 0;
+            background: white;
+        }
+
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 32px;
+            margin-top: 60px;
+        }
+
+        .service-card {
+            padding: 40px;
+            border-radius: 16px;
+            background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+            transition: all 0.3s ease;
+            border: 1px solid #e2e8f0;
+        }
+
+        .service-card:hover {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            transform: scale(1.05);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+        }
+
+        .service-card h3 {
+            font-size: 1.5em;
+            margin-bottom: 16px;
+            font-weight: 700;
+        }
+
+        .service-card ul {
+            list-style: none;
+            margin-top: 20px;
+        }
+
+        .service-card li {
+            padding: 8px 0;
+            padding-left: 28px;
+            position: relative;
+        }
+
+        .service-card li::before {
+            content: "✓";
+            position: absolute;
+            left: 0;
+            font-weight: bold;
+        }
+
+        /* Testimonials */
+        .testimonials {
+            padding: 120px 0;
+            background: var(--light-color);
+        }
+
+        .testimonials-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 32px;
+            margin-top: 60px;
+        }
+
+        .testimonial-card {
+            background: white;
+            padding: 40px;
+            border-radius: 16px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            border: 1px solid #e2e8f0;
+        }
+
+        .stars {
+            color: #fbbf24;
+            font-size: 1.5em;
+            margin-bottom: 16px;
+        }
+
+        .testimonial-text {
+            font-size: 1.1em;
+            line-height: 1.7;
+            color: var(--gray-color);
+            margin-bottom: 24px;
+        }
+
+        .testimonial-author {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .author-avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 700;
+            font-size: 1.2em;
+        }
+
+        .author-info h4 {
+            font-weight: 700;
+            color: var(--dark-color);
+        }
+
+        .author-info p {
+            color: var(--gray-color);
+            font-size: 0.9em;
+        }
+
+        /* CTA Section */
+        .cta-section {
+            padding: 120px 0;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .cta-section::before {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 1px, transparent 1px);
+            background-size: 50px 50px;
+        }
+
+        .cta-section .container {
+            position: relative;
+            z-index: 1;
+        }
+
+        .cta-section h2 {
+            font-size: 3em;
+            font-weight: 800;
+            margin-bottom: 24px;
+        }
+
+        .cta-section p {
+            font-size: 1.3em;
+            margin-bottom: 40px;
+            opacity: 0.95;
+        }
+
+        /* Footer */
+        footer {
+            background: var(--dark-color);
+            color: white;
+            padding: 60px 0 30px;
+        }
+
+        .footer-content {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
             gap: 40px;
+            margin-bottom: 40px;
         }
-        .benefit-card {
-            background: white;
-            padding: 30px;
-            border-radius: 10px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-            text-align: center;
-        }
-        .benefit-card h3 {
-            font-size: 1.5em;
-            margin-bottom: 15px;
-            color: #667eea;
-        }
-        .icon {
-            font-size: 3em;
+
+        .footer-section h3 {
             margin-bottom: 20px;
+            font-weight: 700;
         }
-        /* Contact Section */
-        .contact {
-            padding: 80px 0;
-            text-align: center;
-            background: white;
+
+        .footer-section ul {
+            list-style: none;
         }
-        .contact h2 {
-            font-size: 2.5em;
-            margin-bottom: 20px;
-            color: #667eea;
+
+        .footer-section ul li {
+            padding: 8px 0;
         }
-        .contact p {
-            font-size: 1.3em;
-            margin-bottom: 30px;
+
+        .footer-section a {
+            color: rgba(255,255,255,0.7);
+            text-decoration: none;
+            transition: color 0.3s;
         }
-        /* Footer */
-        footer {
-            background: #333;
+
+        .footer-section a:hover {
             color: white;
-            text-align: center;
-            padding: 30px 0;
         }
-        
+
+        .footer-bottom {
+            text-align: center;
+            padding-top: 30px;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            color: rgba(255,255,255,0.7);
+        }
+
         /* Vapi Button Override - Inline positioning */
         .vapi-btn {
             position: relative !important;
@@ -120,42 +496,118 @@
             bottom: auto !important;
             top: auto !important;
         }
-        
+
+        /* Mobile Menu */
+        .mobile-menu-toggle {
+            display: none;
+            background: none;
+            border: none;
+            font-size: 1.5em;
+            cursor: pointer;
+            color: var(--dark-color);
+        }
+
+        /* Responsive Design */
         @media (max-width: 768px) {
-            header h1 {
-                font-size: 2em;
+            .nav-links {
+                display: none;
             }
-            header p {
+
+            .mobile-menu-toggle {
+                display: block;
+            }
+
+            header h1 {
+                font-size: 2.5em;
+            }
+
+            .hero-subtitle {
                 font-size: 1.2em;
             }
-            .benefits h2, .contact h2 {
+
+            .section-title {
+                font-size: 2em;
+            }
+
+            .trust-stats {
+                gap: 32px;
+            }
+
+            .cta-section h2 {
                 font-size: 2em;
             }
         }
     </style>
 </head>
 <body>
+    <!-- Navigation -->
+    <nav>
+        <div class="container">
+            <div class="logo">CleanPro</div>
+            <ul class="nav-links">
+                <li><a href="#vorteile">Vorteile</a></li>
+                <li><a href="#leistungen">Leistungen</a></li>
+                <li><a href="#bewertungen">Bewertungen</a></li>
+                <li><a href="#kontakt">Kontakt</a></li>
+            </ul>
+            <button class="mobile-menu-toggle">☰</button>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
     <header>
         <div class="container">
-            <h1>Professionelle Büroreinigung</h1>
-            <p>Sauberkeit, auf die Sie sich verlassen können</p>
-            <!-- Widget wird hier erscheinen -->
-            <div id="vapi-button-1"></div>
+            <div class="hero-content">
+                <div class="hero-badge">✨ Professionelle Büroreinigung</div>
+                <h1>Sauberkeit, die beeindruckt</h1>
+                <p class="hero-subtitle">Zuverlässige Reinigungsservices für Ihr Büro – damit Sie sich auf das Wesentliche konzentrieren können</p>
+                <!-- Vapi Button Position 1 -->
+                <div class="cta-container" id="vapi-button-1"></div>
+            </div>
         </div>
     </header>
-    <section class="benefits">
+
+    <!-- Trust Section -->
+    <section class="trust-section">
         <div class="container">
-            <h2>Warum wir?</h2>
+            <div class="trust-content">
+                <p class="trust-text">Vertrauen Sie auf Qualität und Erfahrung</p>
+                <div class="trust-stats">
+                    <div class="stat">
+                        <div class="stat-number">500+</div>
+                        <div class="stat-label">Zufriedene Kunden</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-number">10+</div>
+                        <div class="stat-label">Jahre Erfahrung</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-number">99%</div>
+                        <div class="stat-label">Kundenzufriedenheit</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Benefits Section -->
+    <section class="benefits" id="vorteile">
+        <div class="container">
+            <div class="section-header">
+                <div class="section-badge">Warum CleanPro?</div>
+                <h2 class="section-title">Ihre Vorteile auf einen Blick</h2>
+                <p class="section-description">Professionelle Reinigung, die keine Wünsche offen lässt</p>
+            </div>
             <div class="benefits-grid">
                 <div class="benefit-card">
                     <div class="icon">✨</div>
                     <h3>Höchste Qualität</h3>
-                    <p>Professionelle Reinigung mit geprüften Reinigungskräften und modernster Ausstattung.</p>
+                    <p>Professionelle Reinigung mit geprüften Reinigungskräften und modernster Ausstattung für perfekte Ergebnisse.</p>
                 </div>
                 <div class="benefit-card">
                     <div class="icon">⏰</div>
                     <h3>Flexibel & Zuverlässig</h3>
-                    <p>Reinigung zu Ihren Wunschzeiten - früh morgens, abends oder am Wochenende.</p>
+                    <p>Reinigung zu Ihren Wunschzeiten – früh morgens, abends oder am Wochenende. Wir passen uns Ihrem Zeitplan an.</p>
                 </div>
                 <div class="benefit-card">
                     <div class="icon">💰</div>
@@ -165,22 +617,147 @@
                 <div class="benefit-card">
                     <div class="icon">🛡️</div>
                     <h3>Versichert & Geprüft</h3>
-                    <p>Vollständig versichert und alle Mitarbeiter sind geprüft und geschult.</p>
+                    <p>Vollständig versichert und alle Mitarbeiter sind geprüft, geschult und vertrauenswürdig.</p>
                 </div>
             </div>
         </div>
     </section>
-    <section class="contact" id="kontakt">
+
+    <!-- Services Section -->
+    <section class="services" id="leistungen">
         <div class="container">
-            <h2>Interessiert?</h2>
+            <div class="section-header">
+                <div class="section-badge">Unsere Leistungen</div>
+                <h2 class="section-title">Maßgeschneiderte Reinigungslösungen</h2>
+                <p class="section-description">Von der Grundreinigung bis zur Spezialreinigung – wir haben die passende Lösung</p>
+            </div>
+            <div class="services-grid">
+                <div class="service-card">
+                    <h3>🏢 Büroreinigung</h3>
+                    <ul>
+                        <li>Tägliche Unterhaltsreinigung</li>
+                        <li>Bodenpflege & Staubsaugen</li>
+                        <li>Sanitärreinigung</li>
+                        <li>Müllentsorgung</li>
+                        <li>Fensterreinigung</li>
+                    </ul>
+                </div>
+                <div class="service-card">
+                    <h3>🏭 Industriereinigung</h3>
+                    <ul>
+                        <li>Produktionshallen</li>
+                        <li>Lagerflächen</li>
+                        <li>Spezialreinigung</li>
+                        <li>Maschinenpflege</li>
+                        <li>Entsorgung</li>
+                    </ul>
+                </div>
+                <div class="service-card">
+                    <h3>🏠 Sonderreinigung</h3>
+                    <ul>
+                        <li>Grundreinigung</li>
+                        <li>Teppichreinigung</li>
+                        <li>Fassadenreinigung</li>
+                        <li>Winterdienst</li>
+                        <li>Umzugsreinigung</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonials Section -->
+    <section class="testimonials" id="bewertungen">
+        <div class="container">
+            <div class="section-header">
+                <div class="section-badge">Kundenstimmen</div>
+                <h2 class="section-title">Was unsere Kunden sagen</h2>
+                <p class="section-description">Überzeugen Sie sich selbst von unserer Qualität</p>
+            </div>
+            <div class="testimonials-grid">
+                <div class="testimonial-card">
+                    <div class="stars">⭐⭐⭐⭐⭐</div>
+                    <p class="testimonial-text">"Absolute Spitzenklasse! Unser Büro war noch nie so sauber. Das Team ist pünktlich, zuverlässig und sehr professionell."</p>
+                    <div class="testimonial-author">
+                        <div class="author-avatar">MS</div>
+                        <div class="author-info">
+                            <h4>Maria Schmidt</h4>
+                            <p>Geschäftsführerin, TechStart GmbH</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="testimonial-card">
+                    <div class="stars">⭐⭐⭐⭐⭐</div>
+                    <p class="testimonial-text">"Wir sind seit 3 Jahren Kunde und absolut zufrieden. Die Flexibilität und Qualität ist unschlagbar!"</p>
+                    <div class="testimonial-author">
+                        <div class="author-avatar">TM</div>
+                        <div class="author-info">
+                            <h4>Thomas Müller</h4>
+                            <p>Facility Manager, Büropark München</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="testimonial-card">
+                    <div class="stars">⭐⭐⭐⭐⭐</div>
+                    <p class="testimonial-text">"Faire Preise, toller Service und immer ein offenes Ohr für Sonderwünsche. Absolute Empfehlung!"</p>
+                    <div class="testimonial-author">
+                        <div class="author-avatar">AK</div>
+                        <div class="author-info">
+                            <h4>Anna Klein</h4>
+                            <p>Office Managerin, Design Studio</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="cta-section" id="kontakt">
+        <div class="container">
+            <h2>Bereit für ein sauberes Büro?</h2>
             <p>Klicken Sie auf den Button für eine kostenlose telefonische Beratung!</p>
-            <!-- Widget wird auch hier erscheinen -->
+            <!-- Vapi Button Position 2 -->
             <div id="vapi-button-2"></div>
         </div>
     </section>
+
+    <!-- Footer -->
     <footer>
         <div class="container">
-            <p>&copy; 2024 Professionelle Büroreinigung. Alle Rechte vorbehalten.</p>
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>CleanPro</h3>
+                    <p>Professionelle Büroreinigung für Ihr Unternehmen. Sauberkeit, auf die Sie sich verlassen können.</p>
+                </div>
+                <div class="footer-section">
+                    <h3>Services</h3>
+                    <ul>
+                        <li><a href="#leistungen">Büroreinigung</a></li>
+                        <li><a href="#leistungen">Industriereinigung</a></li>
+                        <li><a href="#leistungen">Sonderreinigung</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h3>Unternehmen</h3>
+                    <ul>
+                        <li><a href="#vorteile">Über uns</a></li>
+                        <li><a href="#bewertungen">Referenzen</a></li>
+                        <li><a href="#kontakt">Kontakt</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h3>Rechtliches</h3>
+                    <ul>
+                        <li><a href="#">Impressum</a></li>
+                        <li><a href="#">Datenschutz</a></li>
+                        <li><a href="#">AGB</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2024 CleanPro - Professionelle Büroreinigung. Alle Rechte vorbehalten.</p>
+            </div>
         </div>
     </footer>
 
@@ -189,7 +766,7 @@
         var vapiInstance = null;
         const assistant = "3966c02d-58b3-46da-9ef2-72b0baa97554";
         const apiKey = "0f657d43-6662-4bd6-b23b-fd00c2f2d110";
-        
+
         // Konfiguration für INLINE Button (nicht floating)
         const buttonConfig = {
             position: "relative", // Inline statt floating
@@ -232,39 +809,39 @@
                     assistant: assistant,
                     config: buttonConfig,
                 });
-                
+
                 console.log('Vapi Widget loaded successfully!', vapiInstance);
-                
+
                 // Warte bis Button erstellt wurde, dann verschiebe ihn
                 setTimeout(function() {
                     moveVapiButton();
                 }, 500);
             };
-            
+
             g.onerror = function() {
                 console.error('Failed to load Vapi SDK');
             };
         })(document, "script");
-        
+
         // Funktion um den Vapi Button zu verschieben
         function moveVapiButton() {
             const vapiBtn = document.querySelector('.vapi-btn');
-            
+
             if (vapiBtn) {
                 // Klone den Button für die zweite Position
                 const btnClone = vapiBtn.cloneNode(true);
-                
+
                 // Setze Original in erste Position
                 const container1 = document.getElementById('vapi-button-1');
                 if (container1) {
                     container1.appendChild(vapiBtn);
                 }
-                
+
                 // Setze Klon in zweite Position
                 const container2 = document.getElementById('vapi-button-2');
                 if (container2) {
                     container2.appendChild(btnClone);
-                    
+
                     // Click Event für geklonten Button
                     btnClone.addEventListener('click', function() {
                         if (vapiInstance) {
@@ -272,7 +849,7 @@
                         }
                     });
                 }
-                
+
                 console.log('Vapi buttons positioned inline');
             } else {
                 console.error('Vapi button not found');
